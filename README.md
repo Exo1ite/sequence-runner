@@ -1,16 +1,16 @@
 # Sequence Runner
 
-Sequence Runner is a dependency-free first-person browser puzzle served by a Cloudflare Worker. Choose a route, walk the forward corridor, and activate each glowing panel in numerical order.
+Sequence Runner is a dependency-free first-person rhythm platformer served by a Cloudflare Worker. Choose Easy, Medium, or Hard, then jump across separated platforms with gaps, turns, and elevation changes while activating targets in order before the timer expires.
 
 ## Controls
 
-- `W A S D` — move
+- `W A S D` — move relative to horizontal facing
 - Mouse — look around (click the game to capture the cursor)
 - `Space` — jump
 - Left click — activate the panel in your reticle
 - `Esc` — release the cursor
 
-The three routes have different lengths and generated musical motifs. Panel activation has a bright confirmation sound; incorrect attempts produce a low warning tone. The route positions always increase down the corridor, so there is no backtracking or circular route.
+The routes use distinct target counts, platform geometry, timers, and generated musical motifs. Falls respawn at the latest safe platform with a small time penalty. Yaw and pitch are separate and pitch is clamped to ±85 degrees. Future targets remain dim and cannot advance the fixed sequence.
 
 ## Worker
 
@@ -18,6 +18,4 @@ The three routes have different lengths and generated musical motifs. Panel acti
 
 ## Verification and handoff
 
-The current local commit is `a37509a`. The embedded browser script was compiled and initialized with V8 using DOM, canvas, pointer-lock, timer, and Web Audio stubs. Behavior checks passed for all three route completions, far-panel rejection, forward barriers, reverse-movement clamping, music restart on a second level, and paused movement without pointer lock. These are execution checks against the game functions; they are not a substitute for a real browser session.
-
-The local Git commit succeeded, but pushing to the configured HTTPS remote needs a GitHub credential. The GitHub Contents connector returned HTTP 403, and the Cloudflare Worker upload returned an authentication error, so an account with GitHub write and Cloudflare Workers write permissions must complete the external sync/deploy step. The deployment input is this file (`worker.js`), uploaded as an ES module Worker.
+The previous deployment is available at https://sequence-runner.exo1ite.workers.dev/; redeploy this revision before relying on it. `git diff --check` and source assertions pass. Node/Wrangler are unavailable here, so real-browser profiling and 60 FPS measurement remain to be run on a device.
